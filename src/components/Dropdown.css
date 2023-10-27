@@ -1,0 +1,36 @@
+/* Style the container div */
+.dropdown {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 300px;
+  margin-top: 20px;
+}
+
+/* Style the label */
+label {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+/* Style the select element */
+select {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+  transition: border-color 0.2s;
+  width: 100%;
+  max-width: 400px;
+}
+
+/* Style the select element on hover */
+select:hover {
+  border-color: #666;
+}
+
+/* Style the select element when focused */
+select:focus {
+  border-color: #007bff; /* You can choose your desired focus color */
+}

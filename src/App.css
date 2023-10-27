@@ -1,0 +1,22 @@
+.center {
+  width: 50%;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.flex-main {
+  display: flex;
+}
+.flex {
+  width: 60%;
+  display: flex;
+  gap: 20px;
+  flex: 1;
+}
+
+.flex-2 {
+  width: 30%;
+  display: flex;
+  justify-content: flex-end;
+  flex: 1;
+}
