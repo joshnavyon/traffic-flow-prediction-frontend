@@ -58,8 +58,8 @@ const MapGL = ({ nodes, index, routes }) => {
                   type: "Feature",
                   geometry: {
                     type: "LineString",
-                    coordinates: Object.keys(routes.routes[index].path).map((key) => {
-                      const node = nodes[key];
+                    coordinates: routes.routes[index].path.map((nodeMap) => {
+                      const node = nodes[nodeMap.scat];
                       if (!node) return null; // Skip nodes with missing data
                       return [node.long + offsetLon, node.lat + offsetLat];
                     }),
