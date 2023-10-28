@@ -2,12 +2,11 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Map from "./components/MapGL";
 import Dropdown from "./components/Dropdown";
-import Button from "./components/Button";
 import "./App.css";
+import { TextField, Button, Grid, Container, AppBar, Toolbar, Typography, Box} from "@mui/material";
+import Alert from '@mui/material/Alert';
 
 function App() {
-  const options = ["0970", "3127", "11:00:00"];
-
   const [origin, setOrigin] = useState("");
 
   const [routeIndex, setRouteIndex] = useState();
@@ -16,7 +15,9 @@ function App() {
 
   const [destination, setDestination] = useState("");
   const [time, setTime] = useState("");
+
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const [num, setNum] = useState([]);
 
@@ -33,8 +34,9 @@ function App() {
     setDestination(option);
   };
 
-  const handleTimeSelect = (option) => {
-    setTime(option);
+  const handleTimeSelect = (event) => {
+    const newTimeValue = event.target.value;
+    setTime(newTimeValue); 
   };
 
   const fetchRoutes = (time, origin, destination) => {
@@ -53,7 +55,7 @@ function App() {
   const handleGetRoute = () => {
     if (!time || !origin || !destination) {
       // Check if any of the fields is empty
-      setError("All options are required!");
+      setError("All Options are Required!");
       return;
     }
 
@@ -61,7 +63,7 @@ function App() {
     fetchRoutes(time, origin, destination)
       .then((response) => {
         setRoutes(response.data);
-
+        
         const arrayNum = Array.from({ length: response.data.routes.length }, (_, index) =>
           (index + 1).toString()
         );
@@ -69,10 +71,15 @@ function App() {
         setNum(arrayNum);
         console.log("NUM: ", arrayNum);
         console.log(response.data);
+
+        setError("");  // Reset error message as it was successful
+        setSuccess("Routes were Fetched Successfully!"); 
       })
       .catch((error) => {
         // Handle errors here
         console.error("Error:", error);
+        setError("Failed to Fetch Routes! Please Ensure the Time was Entered Correctly");  
+
       });
   };
 
@@ -89,38 +96,65 @@ function App() {
       });
   }, []);
   return (
-    <div className="App">
-      <h1>Finding Shortest Path</h1>
-      {/* <p>Time: {data.time}</p>
-      <p>Origin: {data.origin}</p>
-      <p>destination: {data.destination}</p> */}
+    <Container className="App">
+      <Grid container spacing={2}>
+        <Grid item xs={12} md={12}>
+          <h1>Traffic Flow Prediction System GUI</h1>
+          <p>The following system has been constructed on React JS utlising the Material UI library to utilise visual components. The map is React Map GL providing a visualisation of all SCAT Node Locations.</p>
+        </Grid>
+        <Grid item xs={12} md={12}>
+          <Map nodes={nodes} index={routeIndex} routes={routes} />
+        </Grid>
 
-      <div className="center">
-        <Map nodes={nodes} index={routeIndex} routes={routes} />
-        <div className="flex-main">
-          <div className="flex">
-            <Dropdown options={options} onChange={handleOriginSelect} title="Origin Node" />
-            <Dropdown
-              options={options}
-              onChange={handleDestinationSelect}
-              title="Destination Node"
-            />
-          </div>
-          <div className="flex-2">
-            <Dropdown options={options} onChange={handleTimeSelect} title="Departure Time" />
-          </div>
-        </div>
-        {error && <p style={{ color: "red" }}>{error}</p>}
-        {routes ? (
-          <Dropdown options={num} onChange={handleRouteSelect} title="Choose Route" />
-        ) : (
-          <></>
-        )}
-        <Button onClick={handleGetRoute} className="button">
-          Get Routes
-        </Button>
-      </div>
-    </div>
+        <Grid item xs={6} lg={4}>
+          <Dropdown options={nodes ? Object.keys(nodes) : []} onChange={handleOriginSelect} title="Origin Node (O)" />
+        </Grid>
+
+        <Grid item xs={6} lg={4}>
+          <Dropdown options={nodes ? Object.keys(nodes) : []} onChange={handleDestinationSelect} title="Destination Node (D)"/>
+        </Grid>
+
+        <Grid item xs={6} lg={12}>
+          <label for="outlined-basic"><strong>Time:</strong></label>
+          <br/>
+          <br/>
+          <TextField id="outlined-basic" label="00:00:00" onChange={handleTimeSelect} variant="outlined" />
+        </Grid>
+
+        <Grid item xs={12} lg={12}>
+
+          <Button variant="outlined" color="primary" onClick={handleGetRoute}>
+            Get Routes
+          </Button>
+
+        </Grid>
+
+        <Grid item xs={12} lg={12}>
+
+          {error && <Alert severity="error">{error}</Alert>}  {}
+          {success && <Alert severity="success">{success}</Alert>}  {}
+
+          {routes ? (
+            <Dropdown options={num} onChange={handleRouteSelect} title="Choose Route" />
+          ) : (
+            <></>
+          )}
+        </Grid>
+
+        <Grid item xs={12}>
+                <div style={{ height: '200px' }}></div>  {/* Adds space between footer and content */}
+            </Grid>
+        </Grid>
+
+        <AppBar position="fixed" color="primary" sx={{ top: 'auto', bottom: 0 }}>
+            <Toolbar>
+                <Typography variant="body1" color="inherit">
+                    Traffic Flow Prediction System GUI, 2023
+                </Typography>
+            </Toolbar>
+        </AppBar>
+    </Container>
+
   );
 }
 

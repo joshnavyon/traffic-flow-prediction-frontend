@@ -1,7 +1,6 @@
-import React, { useEffect, useState, useRef } from "react";
+import React from "react";
 import mapboxgl from "mapbox-gl";
 import "./Map.css";
-import axios from "axios";
 import "mapbox-gl/dist/mapbox-gl.css";
 import Map, { Marker, Source, Layer } from "react-map-gl";
 
@@ -59,8 +58,8 @@ const MapGL = ({ nodes, index, routes }) => {
                   type: "Feature",
                   geometry: {
                     type: "LineString",
-                    coordinates: routes.routes[index].path.map((nodeId) => {
-                      const node = nodes[nodeId];
+                    coordinates: Object.keys(routes.routes[index].path).map((key) => {
+                      const node = nodes[key];
                       if (!node) return null; // Skip nodes with missing data
                       return [node.long + offsetLon, node.lat + offsetLat];
                     }),

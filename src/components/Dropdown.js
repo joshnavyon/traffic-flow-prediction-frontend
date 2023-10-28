@@ -11,7 +11,9 @@ const Dropdown = ({ options, onChange, title }) => {
 
   return (
     <div className="dropdown">
-      <label for={title}>{title}:</label>
+      <label for={title}><strong>{title}:</strong></label>
+      <br/>
+
       <select id={title} value={option} onChange={handleOptionChange}>
         <option value="" disabled>
           ---
